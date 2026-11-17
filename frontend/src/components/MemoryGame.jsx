@@ -163,7 +163,7 @@ function MemoryGame({ currentUser, onReturnToMenu, onOpenLeaderboard }) {
   const hasSubmittedScoreRef = useRef(false)
   const lastSubmissionPayloadRef = useRef(null)
   const isSubmittingScoreRef = useRef(false)
-  const [scoreSubmitStatus, setScoreSubmitStatus] = useState('idle') // 'idle' | 'submitting' | 'success' | 'error'
+  const [scoreSubmitStatus, setScoreSubmitStatus] = useState('idle') // 'idle' | 'submitting' | 'success' | 'error' | 'guest'
   const [scoreSubmitError, setScoreSubmitError] = useState(null)
 
   useEffect(() => {
@@ -842,7 +842,11 @@ function MemoryGame({ currentUser, onReturnToMenu, onOpenLeaderboard }) {
         }
         console.warn('Leaderboard score submission notice:', err.message)
         setScoreSubmitStatus('error')
-        setScoreSubmitError(err.message)
+        if (err.status === 401 || err.message?.toLowerCase().includes('authentication required')) {
+          setScoreSubmitError('Your session has expired. Please log in again to save your score to the Deep Sea Hall of Fame.')
+        } else {
+          setScoreSubmitError(err.message)
+        }
       })
       .finally(() => {
         if (expeditionIdRef.current === submittedExpeditionId) {
@@ -852,17 +856,28 @@ function MemoryGame({ currentUser, onReturnToMenu, onOpenLeaderboard }) {
   }, [])
 
   const handleRetryScoreSubmission = useCallback(() => {
+    if (!currentUser) return
     const payload = lastSubmissionPayloadRef.current
     if (!payload || expeditionIdRef.current !== payload.expeditionId) return
     playSound(SOUND_EFFECTS.BUTTON_CLICK)
     dispatchScoreSubmission(payload)
-  }, [dispatchScoreSubmission])
+  }, [currentUser, dispatchScoreSubmission])
 
   // Auto-submit completed expedition result to backend leaderboard on victory
   useEffect(() => {
     if (!showVictoryModal || hasSubmittedScoreRef.current) return
 
     hasSubmittedScoreRef.current = true
+
+    // Unauthenticated guests should not submit scores to the leaderboard
+    if (!currentUser) {
+      const t = setTimeout(() => {
+        if (!isMountedRef.current) return
+        setScoreSubmitStatus('guest')
+        setScoreSubmitError('Guest expedition completed! Log in to save your score to the Deep Sea Hall of Fame.')
+      }, 0)
+      return () => clearTimeout(t)
+    }
 
     if (!expeditionIdRef.current) {
       if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -878,7 +893,7 @@ function MemoryGame({ currentUser, onReturnToMenu, onOpenLeaderboard }) {
       totalMoves: totalExpeditionMoves,
       starsEarned: stars,
       remainingOxygen: oxygen,
-      guestUsername: currentUser?.username || 'Guest Explorer',
+      guestUsername: currentUser.username,
     }
 
     lastSubmissionPayloadRef.current = payload

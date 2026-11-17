@@ -290,6 +290,11 @@ function VictoryCelebration({
                 🏆 Expedition recorded in the Deep Sea Hall of Fame!
               </span>
             )}
+            {scoreSubmitStatus === 'guest' && (
+              <span className="submit-badge guest">
+                ⚓ {scoreSubmitError || 'Guest expedition completed! Log in to save your score to the Deep Sea Hall of Fame.'}
+              </span>
+            )}
             {scoreSubmitStatus === 'error' && (
               <>
                 <span className="submit-badge error">
