@@ -1,0 +1,22 @@
+# Secrets & Local Environment Files
+.env
+.env.*
+!.env.example
+**/application-local.properties
+**/application-local.yml
+**/application-local.yaml
+
+# Build & Dependency Artifacts
+backend/target/
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# Logs & Editor Files
+*.log
+database_backup/
+*.sql
+.vscode/
+.idea/
+.DS_Store
+

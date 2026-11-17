@@ -1,0 +1,750 @@
+/* ==========================================================================
+   BUBBLES GUIDE - INTERACTIVE BABY DOLPHIN COMPANION
+   ========================================================================== */
+
+.bubbles-guide-dock {
+  position: fixed;
+  left: clamp(0.65rem, 1.8vw, 1.5rem);
+  bottom: clamp(0.65rem, 2vh, 1.25rem);
+  z-index: 35;
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Sit cleanly beside centered modal on wide desktop screens during celebrations */
+.bubbles-guide-dock.bubbles-modal-celebrate {
+  z-index: 105;
+}
+
+/* Keep Bubbles visibly cheering in bottom-left during the chest-opening celebration */
+.bubbles-guide-dock.bubbles-chest-celebrate {
+  z-index: 120;
+  display: flex;
+}
+
+@media (max-width: 959px), (max-height: 619px) {
+  .bubbles-guide-dock.bubbles-modal-celebrate:not(.bubbles-chest-celebrate) {
+    display: none;
+  }
+}
+
+.bubbles-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Contextual Speech Bubble (Light Pearl-White Frosted Glass + Dark Navy Text)
+   -------------------------------------------------------------------------- */
+.bubbles-speech-bubble {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);
+  width: max-content;
+  max-width: min(clamp(208px, 19vw, 248px), calc(100vw - 28px));
+  padding: 0.68rem 0.95rem 0.72rem;
+  border-radius: 18px;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(232, 251, 255, 0.94) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(94, 231, 223, 0.92);
+  box-shadow:
+    0 12px 28px rgba(3, 18, 34, 0.42),
+    0 0 20px rgba(131, 240, 229, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  transform-origin: 42px bottom;
+  animation: bubblesPopIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transition: opacity 0.32s ease, transform 0.32s ease;
+}
+
+@media (min-width: 960px) and (max-width: 1080px) {
+  .bubbles-guide-dock.bubbles-modal-celebrate .bubbles-speech-bubble {
+    max-width: 196px;
+  }
+}
+
+.bubbles-speech-bubble.is-closing {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.94);
+}
+
+.speech-sender-tag {
+  display: block;
+  font-family: 'Fredoka', var(--font-heading), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #087e8b;
+  margin-bottom: 0.14rem;
+}
+
+.speech-text {
+  margin: 0;
+  font-family: 'Nunito', var(--font-sans), sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #06213a;
+}
+
+.speech-tail {
+  position: absolute;
+  left: 42px;
+  bottom: -8px;
+  width: 13px;
+  height: 13px;
+  background: #ecfcff;
+  border-right: 2px solid rgba(94, 231, 223, 0.92);
+  border-bottom: 2px solid rgba(94, 231, 223, 0.92);
+  border-right-color: inherit;
+  border-bottom-color: inherit;
+  transform: rotate(45deg);
+}
+
+/* Speech Mood Accents */
+.bubbles-speech-bubble.speech-mismatch {
+  border-color: rgba(92, 200, 255, 0.94);
+  box-shadow:
+    0 12px 28px rgba(3, 18, 34, 0.42),
+    0 0 20px rgba(92, 200, 255, 0.5);
+}
+
+.bubbles-speech-bubble.speech-mismatch .speech-sender-tag {
+  color: #0b6ca8;
+}
+
+.bubbles-speech-bubble.speech-warning {
+  background: linear-gradient(155deg, rgba(255, 253, 245, 0.97) 0%, rgba(255, 243, 214, 0.95) 100%);
+  border-color: #f59e0b;
+  box-shadow:
+    0 12px 28px rgba(3, 18, 34, 0.44),
+    0 0 22px rgba(255, 200, 87, 0.58);
+}
+
+.bubbles-speech-bubble.speech-warning .speech-sender-tag {
+  color: #b45309;
+}
+
+.bubbles-speech-bubble.speech-warning .speech-tail {
+  background: #fff5dc;
+}
+
+.bubbles-speech-bubble.speech-emergency {
+  background: linear-gradient(155deg, rgba(255, 247, 248, 0.98) 0%, rgba(255, 228, 233, 0.96) 100%);
+  border-color: #e11d48;
+  box-shadow:
+    0 12px 28px rgba(3, 18, 34, 0.48),
+    0 0 24px rgba(255, 59, 86, 0.62);
+}
+
+.bubbles-speech-bubble.speech-emergency .speech-sender-tag {
+  color: #be123c;
+}
+
+.bubbles-speech-bubble.speech-emergency .speech-text {
+  color: #2b0610;
+}
+
+.bubbles-speech-bubble.speech-emergency .speech-tail {
+  background: #ffe8ec;
+}
+
+.bubbles-speech-bubble.speech-levelComplete,
+.bubbles-speech-bubble.speech-victory {
+  background: linear-gradient(155deg, rgba(255, 254, 248, 0.98) 0%, rgba(255, 247, 220, 0.95) 100%);
+  border-color: #f6b93b;
+  box-shadow:
+    0 12px 28px rgba(3, 18, 34, 0.44),
+    0 0 24px rgba(255, 208, 92, 0.65);
+}
+
+.bubbles-speech-bubble.speech-levelComplete .speech-sender-tag,
+.bubbles-speech-bubble.speech-victory .speech-sender-tag {
+  color: #a16207;
+}
+
+.bubbles-speech-bubble.speech-levelComplete .speech-tail,
+.bubbles-speech-bubble.speech-victory .speech-tail {
+  background: #fff7dd;
+}
+
+@keyframes bubblesPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.84);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Dolphin Character Container & Luminous Halo (~40% larger on desktop)
+   -------------------------------------------------------------------------- */
+.bubbles-character-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 118px;
+  pointer-events: none;
+}
+
+.bubbles-glow-halo {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 120px;
+  height: 106px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(235, 255, 254, 0.46) 0%,
+    rgba(96, 243, 236, 0.34) 44%,
+    rgba(32, 199, 201, 0.14) 64%,
+    transparent 78%
+  );
+  filter: blur(8px);
+  transition: background 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bubbles-glow-halo.halo-mismatch {
+  background: radial-gradient(
+    circle,
+    rgba(226, 248, 255, 0.46) 0%,
+    rgba(92, 200, 255, 0.36) 46%,
+    transparent 76%
+  );
+}
+
+.bubbles-glow-halo.halo-warning {
+  background: radial-gradient(
+    circle,
+    rgba(255, 244, 210, 0.52) 0%,
+    rgba(255, 200, 87, 0.45) 48%,
+    transparent 78%
+  );
+  animation: bubblesGlowPulse 1.8s ease-in-out infinite;
+}
+
+.bubbles-glow-halo.halo-emergency {
+  background: radial-gradient(
+    circle,
+    rgba(255, 225, 232, 0.52) 0%,
+    rgba(255, 59, 86, 0.54) 50%,
+    transparent 78%
+  );
+  animation: bubblesGlowPulse 1s ease-in-out infinite;
+}
+
+.bubbles-glow-halo.halo-levelComplete,
+.bubbles-glow-halo.halo-victory {
+  background: radial-gradient(
+    circle,
+    rgba(255, 250, 224, 0.55) 0%,
+    rgba(255, 216, 107, 0.48) 46%,
+    rgba(131, 240, 229, 0.25) 66%,
+    transparent 80%
+  );
+  animation: bubblesGlowPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes bubblesGlowPulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(0.95);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Swimming Float & SVG Container */
+.bubbles-swim-float {
+  position: relative;
+  z-index: 2;
+  width: 110px;
+  height: 102px;
+  animation: bubblesIdleSwim 3.4s ease-in-out infinite;
+  filter:
+    drop-shadow(0 8px 16px rgba(3, 14, 28, 0.65))
+    drop-shadow(0 0 12px rgba(210, 255, 252, 0.45));
+}
+
+.bubbles-mood-motion {
+  width: 100%;
+  height: 100%;
+}
+
+.bubbles-dolphin-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes bubblesIdleSwim {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1.5deg);
+  }
+}
+
+/* Mood-specific One-shot & Ambient Motions */
+.bubbles-mood-motion.motion-match {
+  animation: bubblesHappyBounce 0.72s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bubbles-mood-motion.motion-mismatch {
+  animation: bubblesHeadTilt 0.85s ease-in-out;
+}
+
+.bubbles-mood-motion.motion-warning {
+  animation: bubblesConcernedSway 1.6s ease-in-out infinite;
+}
+
+.bubbles-mood-motion.motion-emergency {
+  animation: bubblesEmergencyAlert 0.65s ease-in-out infinite;
+}
+
+.bubbles-mood-motion.motion-levelComplete {
+  animation: bubblesExcitedJump 0.85s cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+
+.bubbles-mood-motion.motion-victory {
+  animation: bubblesVictoryCelebrate 1.6s ease-in-out infinite;
+}
+
+@keyframes bubblesHappyBounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    transform: translateY(-13px) scale(1.08) rotate(3deg);
+  }
+  65% {
+    transform: translateY(1px) scale(0.96);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bubblesHeadTilt {
+  0% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-9deg) translateY(2px);
+  }
+  70% {
+    transform: rotate(-6deg) translateY(1px);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes bubblesConcernedSway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2.5deg) translateY(-2px);
+  }
+}
+
+@keyframes bubblesEmergencyAlert {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(3deg);
+  }
+}
+
+@keyframes bubblesExcitedJump {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-18px) scale(1.1) rotate(5deg);
+  }
+  75% {
+    transform: translateY(-4px) scale(0.98) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes bubblesVictoryCelebrate {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg) scale(1);
+  }
+  28% {
+    transform: translateY(-16px) rotate(5deg) scale(1.08);
+  }
+  52% {
+    transform: translateY(-2px) rotate(-1deg) scale(1.01);
+  }
+  74% {
+    transform: translateY(-11px) rotate(4deg) scale(1.06);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Decorative Bubble Particles & Sparkles
+   -------------------------------------------------------------------------- */
+.bubbles-particles {
+  position: absolute;
+  inset: -6px -6px 14px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.dolphin-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95), rgba(168, 252, 248, 0.52));
+  border: 1px solid rgba(220, 255, 253, 0.88);
+  animation: dolphinBubbleRise 2.8s ease-in infinite;
+}
+
+.dolphin-bubble.db-1 {
+  width: 9px;
+  height: 9px;
+  right: 4px;
+  bottom: 32px;
+  animation-delay: 0s;
+}
+
+.dolphin-bubble.db-2 {
+  width: 6.5px;
+  height: 6.5px;
+  right: -4px;
+  bottom: 46px;
+  animation-delay: 0.95s;
+}
+
+.dolphin-bubble.db-3 {
+  width: 7.5px;
+  height: 7.5px;
+  left: 6px;
+  bottom: 40px;
+  animation-delay: 1.75s;
+}
+
+@keyframes dolphinBubbleRise {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-32px) scale(1.1);
+  }
+}
+
+.bubbles-sparkles {
+  position: absolute;
+  inset: -12px -10px 18px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.b-sparkle {
+  position: absolute;
+  color: #ffd86b;
+  font-size: 0.92rem;
+  text-shadow: 0 0 10px rgba(255, 200, 87, 0.95);
+  animation: bubblesSparkleTwinkle 1.4s ease-in-out infinite;
+}
+
+.b-sparkle.bs-1 {
+  top: 2px;
+  right: 4px;
+  color: #a8fcf6;
+  animation-delay: 0s;
+}
+
+.b-sparkle.bs-2 {
+  top: -6px;
+  left: 10px;
+  font-size: 1rem;
+  animation-delay: 0.35s;
+}
+
+.b-sparkle.bs-3 {
+  bottom: 30px;
+  right: -8px;
+  font-size: 0.8rem;
+  animation-delay: 0.65s;
+}
+
+@keyframes bubblesSparkleTwinkle {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: scale(0.75) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(12deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Nameplate & Accessible Minimize / Expand Controls
+   -------------------------------------------------------------------------- */
+.bubbles-control-bar {
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  margin-top: -6px;
+  padding: 0.16rem 0.24rem 0.16rem 0.62rem;
+  background: rgba(6, 27, 44, 0.9);
+  border: 1.5px solid rgba(131, 240, 229, 0.68);
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55), 0 0 12px rgba(131, 240, 229, 0.3);
+}
+
+.bubbles-name-pill {
+  font-family: 'Fredoka', var(--font-heading), sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #b4fff9;
+  letter-spacing: 0.04em;
+}
+
+.bubbles-minimize-btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(168, 252, 248, 0.55);
+  background: rgba(16, 75, 110, 0.9);
+  color: #f4faff;
+  font-size: 0.84rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.bubbles-minimize-btn:hover,
+.bubbles-minimize-btn:focus-visible {
+  background: rgba(32, 199, 201, 0.55);
+  border-color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid #83f0e5;
+  outline-offset: 2px;
+}
+
+/* Minimized Dock Pill */
+.bubbles-minimized-pill {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.34rem 0.76rem;
+  background: linear-gradient(145deg, rgba(11, 57, 84, 0.92) 0%, rgba(6, 27, 44, 0.96) 100%);
+  border: 1.5px solid rgba(131, 240, 229, 0.72);
+  border-radius: 9999px;
+  color: #f4faff;
+  font-family: 'Fredoka', var(--font-sans), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 14px rgba(131, 240, 229, 0.35);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease;
+}
+
+.bubbles-minimized-pill:hover,
+.bubbles-minimized-pill:focus-visible {
+  transform: translateY(-2px);
+  border-color: #b4fff9;
+  outline: 2px solid #83f0e5;
+  outline-offset: 2px;
+}
+
+.bubbles-minimized-pill.pill-warning {
+  border-color: #ffc857;
+}
+
+.bubbles-minimized-pill.pill-emergency {
+  border-color: #ff4d6d;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), 0 0 16px rgba(255, 59, 86, 0.55);
+}
+
+.minimized-dolphin-glyph {
+  font-size: 0.96rem;
+  line-height: 1;
+}
+
+.minimized-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #20c7c9;
+  box-shadow: 0 0 6px #20c7c9;
+}
+
+.minimized-status-dot.dot-warning {
+  background: #ffc857;
+  box-shadow: 0 0 8px #ffc857;
+}
+
+.minimized-status-dot.dot-emergency {
+  background: #ff3b56;
+  box-shadow: 0 0 8px #ff3b56;
+  animation: bubblesGlowPulse 1s ease-in-out infinite;
+}
+
+.minimized-status-dot.dot-victory {
+  background: #ffd166;
+  box-shadow: 0 0 8px #ffd166;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Behavior (Tablet, Mobile & Short Screens)
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .bubbles-guide-dock {
+    left: 0.55rem;
+    bottom: 0.55rem;
+  }
+
+  .bubbles-character-wrap {
+    width: 90px;
+  }
+
+  .bubbles-swim-float {
+    width: 84px;
+    height: 78px;
+  }
+
+  .bubbles-glow-halo {
+    width: 90px;
+    height: 80px;
+  }
+
+  .bubbles-speech-bubble {
+    max-width: min(210px, calc(100vw - 24px));
+    padding: 0.56rem 0.8rem 0.6rem;
+    border-radius: 16px;
+  }
+
+  .speech-tail {
+    left: 34px;
+  }
+
+  .speech-text {
+    font-size: 0.84rem;
+  }
+}
+
+@media (max-width: 600px), (max-height: 600px) {
+  .bubbles-guide-dock {
+    left: 0.45rem;
+    bottom: 0.45rem;
+  }
+
+  .bubbles-character-wrap {
+    width: 70px;
+  }
+
+  .bubbles-swim-float {
+    width: 64px;
+    height: 60px;
+  }
+
+  .bubbles-glow-halo {
+    width: 68px;
+    height: 60px;
+  }
+
+  .bubbles-control-bar {
+    margin-top: -4px;
+    padding: 0.1rem 0.18rem 0.1rem 0.46rem;
+  }
+
+  .bubbles-name-pill {
+    font-size: 0.62rem;
+  }
+
+  .bubbles-minimize-btn {
+    width: 17px;
+    height: 17px;
+    font-size: 0.72rem;
+  }
+
+  .bubbles-speech-bubble {
+    bottom: calc(100% + 6px);
+    max-width: min(192px, calc(100vw - 22px));
+    padding: 0.48rem 0.68rem 0.52rem;
+    border-radius: 14px;
+  }
+
+  .speech-tail {
+    left: 26px;
+    width: 11px;
+    height: 11px;
+    bottom: -7px;
+  }
+
+  .speech-sender-tag {
+    font-size: 0.58rem;
+  }
+
+  .speech-text {
+    font-size: 0.78rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility: Reduced Motion Support
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .bubbles-swim-float,
+  .bubbles-mood-motion,
+  .bubbles-glow-halo,
+  .dolphin-bubble,
+  .b-sparkle,
+  .bubbles-speech-bubble,
+  .minimized-status-dot {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .dolphin-bubble {
+    display: none;
+  }
+}

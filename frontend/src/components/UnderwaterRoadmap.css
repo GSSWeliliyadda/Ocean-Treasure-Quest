@@ -1,0 +1,737 @@
+/* ==========================================================================
+   UNDERWATER ADVENTURE ROADMAP
+   Desktop: Panoramic Horizontal S-Wave Expedition
+   Tablet: Balanced 2x2 Grid + Prominent Climax
+   Mobile: Compact Vertical Winding Path
+   ========================================================================== */
+
+.underwater-roadmap-section {
+  position: relative;
+  width: 100%;
+  padding: clamp(0.85rem, 1.8vh, 1.25rem) clamp(0.9rem, 2vw, 1.5rem) clamp(0.95rem, 2vh, 1.35rem);
+  border-radius: 20px;
+  border: 1.5px solid rgba(110, 238, 234, 0.55);
+  background: linear-gradient(125deg, #0c557a 0%, #093d68 38%, #072652 74%, #06183b 100%);
+  box-shadow:
+    inset 0 0 32px rgba(32, 199, 201, 0.2),
+    0 12px 30px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+/* Ocean Depth Gradient & Scenery Props */
+.roadmap-ocean-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.roadmap-depth-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 35%, rgba(72, 242, 236, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 88% 52%, rgba(255, 209, 102, 0.22) 0%, transparent 42%),
+    linear-gradient(
+      90deg,
+      rgba(68, 242, 236, 0.14) 0%,
+      rgba(32, 199, 201, 0.08) 38%,
+      rgba(25, 86, 168, 0.14) 72%,
+      rgba(10, 20, 62, 0.28) 100%
+    );
+}
+
+.ocean-scenery-prop {
+  position: absolute;
+  font-size: 1.3rem;
+  opacity: 0.48;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+}
+
+.ocean-scenery-prop.prop-top-left {
+  top: 10px;
+  left: 14px;
+}
+
+.ocean-scenery-prop.prop-top-mid {
+  top: 12px;
+  left: 39%;
+}
+
+.ocean-scenery-prop.prop-top-right {
+  top: 14px;
+  right: 16px;
+}
+
+.ocean-scenery-prop.prop-bot-left {
+  bottom: 10px;
+  left: 16px;
+}
+
+.ocean-scenery-prop.prop-bot-mid {
+  bottom: 10px;
+  left: 56%;
+}
+
+.ocean-scenery-prop.prop-bot-right {
+  bottom: 12px;
+  right: 16px;
+}
+
+.roadmap-bubble {
+  position: absolute;
+  bottom: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.85), rgba(131, 240, 229, 0.35));
+  border: 1px solid rgba(190, 255, 250, 0.55);
+  animation: roadmapBubbleFloat var(--rm-dur, 6.5s) ease-in var(--rm-delay, 0s) infinite;
+}
+
+@keyframes roadmapBubbleFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  20% {
+    opacity: 0.62;
+  }
+  80% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-420px) scale(1.1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Roadmap Heading
+   -------------------------------------------------------------------------- */
+.roadmap-header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: clamp(0.6rem, 1.5vh, 1rem);
+}
+
+.roadmap-title {
+  margin: 0 0 0.14rem;
+  font-family: 'Fredoka', var(--font-heading), sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(131, 240, 229, 0.55), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.roadmap-subtitle {
+  margin: 0;
+  font-family: 'Nunito', var(--font-sans), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #ffe38f;
+}
+
+/* --------------------------------------------------------------------------
+   Map Panorama Canvas (Desktop Horizontal S-Wave >= 1040px)
+   -------------------------------------------------------------------------- */
+.roadmap-map-canvas {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.roadmap-svg-trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tablet-trail-svg {
+  display: none;
+}
+
+.roadmap-dotted-stroke {
+  animation: roadmapDashFlow 1.6s linear infinite;
+}
+
+@keyframes roadmapDashFlow {
+  from {
+    stroke-dashoffset: 22;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.roadmap-mobile-spine {
+  display: none;
+}
+
+/* Tiny Animated Submarine Gliding Along Horizontal Wave */
+.roadmap-mini-sub {
+  position: absolute;
+  width: 52px;
+  height: 34px;
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 9px rgba(131, 240, 229, 0.65));
+  animation: roadmapSubPanoramaCruise 11s ease-in-out infinite;
+}
+
+.roadmap-sub-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes roadmapSubPanoramaCruise {
+  0% {
+    left: 11.5%;
+    top: 28%;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(8deg);
+  }
+  6% {
+    left: 11.5%;
+    top: 28%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(10deg);
+  }
+  33% {
+    left: 34.5%;
+    top: 72%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(4deg);
+  }
+  66% {
+    left: 57.5%;
+    top: 28%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-4deg);
+  }
+  90% {
+    left: 82%;
+    top: 50%;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  96%,
+  100% {
+    left: 82%;
+    top: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
+/* Desktop 4-Column Horizontal Wave Grid (3 Levels + Treasure Chest) */
+.roadmap-nodes-track {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.35fr;
+  gap: clamp(0.55rem, 1.1vw, 0.95rem);
+  align-items: stretch;
+  min-height: clamp(295px, 41vh, 365px);
+}
+
+.roadmap-node-slot {
+  display: flex;
+  justify-content: center;
+}
+
+.roadmap-node-slot.wave-high {
+  align-self: flex-start;
+  padding-top: 0.35rem;
+}
+
+.roadmap-node-slot.wave-low {
+  align-self: flex-end;
+  padding-bottom: 0.45rem;
+}
+
+.roadmap-node-slot.slot-treasure {
+  align-self: center;
+}
+
+/* --------------------------------------------------------------------------
+   Level Checkpoint Cards
+   -------------------------------------------------------------------------- */
+.roadmap-checkpoint-card {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.45rem;
+  padding: 0.72rem 0.6rem 0.75rem;
+  border-radius: 18px;
+  background: linear-gradient(155deg, rgba(10, 48, 82, 0.93) 0%, rgba(5, 24, 46, 0.97) 100%);
+  border: 1.5px solid rgba(118, 244, 238, 0.68);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.45),
+    0 0 14px rgba(32, 199, 201, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  animation: roadmapCardFloat 4.2s ease-in-out infinite;
+  animation-delay: calc(var(--cp-idx, 0) * 0.45s);
+}
+
+@keyframes roadmapCardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.roadmap-checkpoint-card.zone-shallow {
+  border-color: rgba(110, 248, 242, 0.82);
+  background: linear-gradient(155deg, rgba(14, 78, 108, 0.94) 0%, rgba(8, 44, 72, 0.96) 100%);
+}
+
+.roadmap-checkpoint-card.zone-coral {
+  border-color: rgba(84, 226, 234, 0.78);
+  background: linear-gradient(155deg, rgba(12, 62, 100, 0.94) 0%, rgba(7, 36, 66, 0.97) 100%);
+}
+
+.roadmap-checkpoint-card.zone-ship {
+  border-color: rgba(255, 208, 107, 0.72);
+  background: linear-gradient(155deg, rgba(16, 48, 92, 0.94) 0%, rgba(8, 28, 60, 0.97) 100%);
+}
+
+.roadmap-checkpoint-card.zone-deep {
+  border-color: rgba(168, 144, 255, 0.76);
+  background: linear-gradient(155deg, rgba(26, 38, 94, 0.94) 0%, rgba(9, 20, 56, 0.97) 100%);
+}
+
+.checkpoint-icon-bubble {
+  position: relative;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 22, 42, 0.88);
+  border: 1.5px solid rgba(131, 240, 229, 0.6);
+  box-shadow: inset 0 0 10px rgba(32, 199, 201, 0.25);
+}
+
+.cp-main-icon {
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.cp-accent-icon {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  font-size: 1rem;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.65));
+}
+
+.checkpoint-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.22rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.checkpoint-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.checkpoint-level-pill {
+  font-family: 'Fredoka', var(--font-heading), sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.08rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(32, 199, 201, 0.25);
+  border: 1px solid rgba(131, 240, 229, 0.75);
+  color: #dcfffe;
+}
+
+.checkpoint-zone-note {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #a6dcec;
+}
+
+.checkpoint-level-name {
+  margin: 0;
+  font-family: 'Fredoka', var(--font-heading), sans-serif;
+  font-size: clamp(0.92rem, 1.25vw, 1.04rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+.checkpoint-stats-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.28rem;
+  margin-top: 0.1rem;
+}
+
+.cp-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.12rem 0.44rem;
+  border-radius: 8px;
+  background: rgba(4, 17, 34, 0.85);
+  border: 1px solid rgba(131, 240, 229, 0.35);
+  font-family: 'Nunito', var(--font-sans), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #e6fbff;
+  white-space: nowrap;
+}
+
+.cp-stat-badge.pairs-stat {
+  border-color: rgba(255, 216, 107, 0.5);
+  color: #ffe8a3;
+}
+
+/* --------------------------------------------------------------------------
+   Prominent Final Destination: Legendary Golden Treasure Chest
+   -------------------------------------------------------------------------- */
+.roadmap-treasure-destination {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.42rem;
+  padding: 0.85rem 0.8rem 0.9rem;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(255, 216, 107, 0.28) 0%, transparent 62%),
+    linear-gradient(160deg, rgba(46, 52, 92, 0.95) 0%, rgba(12, 24, 58, 0.98) 100%);
+  border: 2px solid rgba(255, 216, 107, 0.92);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(255, 200, 87, 0.48),
+    inset 0 1px 0 rgba(255, 245, 195, 0.35);
+}
+
+.destination-sparkles {
+  position: absolute;
+  inset: -6px -4px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.dest-sparkle {
+  position: absolute;
+  color: #ffd86b;
+  font-size: 0.9rem;
+  text-shadow: 0 0 10px rgba(255, 209, 102, 0.95);
+  animation: destSparkleTwinkle 1.8s ease-in-out infinite;
+}
+
+.dest-sparkle.ds-1 {
+  top: 8px;
+  left: 12px;
+  color: #83f0e5;
+  animation-delay: 0s;
+}
+
+.dest-sparkle.ds-2 {
+  top: 8px;
+  right: 14px;
+  animation-delay: 0.5s;
+}
+
+.dest-sparkle.ds-3 {
+  bottom: 10px;
+  left: 14px;
+  animation-delay: 0.95s;
+}
+
+.dest-sparkle.ds-4 {
+  bottom: 10px;
+  right: 14px;
+  font-size: 0.84rem;
+  animation-delay: 1.3s;
+}
+
+@keyframes destSparkleTwinkle {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+.roadmap-treasure-chest-box {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Self-contained Chest Styles (works immediately on Welcome screen) */
+.roadmap-treasure-chest-box .treasure-chest-svg-wrap.chest-size-md {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 96px;
+}
+
+.roadmap-treasure-chest-box .treasure-chest-svg {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter:
+    drop-shadow(0 8px 16px rgba(0, 0, 0, 0.65))
+    drop-shadow(0 0 20px rgba(255, 209, 102, 0.72));
+}
+
+.roadmap-treasure-chest-box .chest-lid-group {
+  transform-origin: 42px 82px;
+  transform: translateY(-16px) rotate(-28deg);
+}
+
+.roadmap-treasure-chest-box .chest-light-rays-wrap {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 210%;
+  height: 195%;
+  transform: translate(-50%, -68%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.roadmap-treasure-chest-box .chest-sunbeams-cone {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from 180deg at 50% 82%,
+    transparent 0deg 142deg,
+    rgba(255, 232, 130, 0.36) 158deg,
+    rgba(255, 248, 200, 0.54) 180deg,
+    rgba(131, 240, 229, 0.28) 196deg,
+    transparent 216deg 360deg
+  );
+  mask-image: radial-gradient(circle at 50% 82%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, 0.55) 45%, transparent 74%);
+  -webkit-mask-image: radial-gradient(circle at 50% 82%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, 0.55) 45%, transparent 74%);
+}
+
+.destination-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.16rem;
+  min-width: 0;
+}
+
+.destination-badge {
+  font-family: 'Fredoka', var(--font-heading), sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #ffd86b;
+  text-transform: uppercase;
+}
+
+.destination-title {
+  margin: 0;
+  font-family: 'Fredoka', var(--font-heading), sans-serif;
+  font-size: 1.06rem;
+  font-weight: 700;
+  color: #fff6cc;
+  text-shadow: 0 0 12px rgba(255, 209, 102, 0.65);
+}
+
+.destination-message {
+  margin: 0;
+  font-family: 'Nunito', var(--font-sans), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.32;
+  color: #e4f8ff;
+}
+
+.destination-message strong {
+  color: #ffd86b;
+}
+
+/* --------------------------------------------------------------------------
+   Tablet Layout (681px - 1039px): Balanced 2x2 Grid + Full Treasure Climax
+   -------------------------------------------------------------------------- */
+@media (max-width: 1039px) {
+  .desktop-wave-trail-svg,
+  .roadmap-mini-sub {
+    display: none;
+  }
+
+  .tablet-trail-svg {
+    display: block;
+  }
+
+  .roadmap-nodes-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+    min-height: auto;
+  }
+
+  .roadmap-node-slot.wave-high,
+  .roadmap-node-slot.wave-low {
+    align-self: stretch;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .roadmap-checkpoint-card {
+    flex-direction: row;
+    text-align: left;
+    padding: 0.72rem 0.85rem;
+  }
+
+  .checkpoint-details {
+    align-items: flex-start;
+  }
+
+  .checkpoint-top-meta,
+  .checkpoint-stats-pills {
+    justify-content: flex-start;
+  }
+
+  .roadmap-node-slot.slot-level-3 {
+    grid-column: 1 / -1;
+    justify-self: center;
+    max-width: 440px;
+    width: 100%;
+  }
+
+  .roadmap-node-slot.slot-treasure {
+    grid-column: 1 / -1;
+  }
+
+  .roadmap-treasure-destination {
+    flex-direction: row;
+    text-align: left;
+    max-width: 540px;
+    padding: 0.85rem 1.15rem;
+    gap: 1rem;
+  }
+
+  .destination-content {
+    align-items: flex-start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Compact Vertical Winding Path (<= 680px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 680px) {
+  .underwater-roadmap-section {
+    padding: 0.9rem 0.75rem 1rem;
+  }
+
+  .tablet-trail-svg {
+    display: none;
+  }
+
+  .roadmap-mobile-spine {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    bottom: 65px;
+    width: 0;
+    border-left: 3.5px dashed rgba(131, 240, 229, 0.65);
+    transform: translateX(-50%);
+    box-shadow: 0 0 12px rgba(32, 199, 201, 0.55);
+    z-index: 0;
+  }
+
+  .roadmap-nodes-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .roadmap-node-slot.slot-level-1 .roadmap-checkpoint-card,
+  .roadmap-node-slot.slot-level-3 .roadmap-checkpoint-card {
+    margin-right: 12px;
+  }
+
+  .roadmap-node-slot.slot-level-2 .roadmap-checkpoint-card {
+    margin-left: 12px;
+  }
+
+  .roadmap-checkpoint-card {
+    width: min(350px, calc(100% - 14px));
+  }
+
+  .roadmap-treasure-destination {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.85rem 0.9rem;
+    gap: 0.55rem;
+  }
+
+  .destination-content {
+    align-items: center;
+  }
+
+  .roadmap-treasure-chest-box .treasure-chest-svg-wrap.chest-size-md {
+    width: 92px;
+    height: 78px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion Accessibility
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .roadmap-dotted-stroke,
+  .roadmap-mini-sub,
+  .roadmap-checkpoint-card,
+  .roadmap-bubble,
+  .dest-sparkle {
+    animation: none !important;
+  }
+
+  .roadmap-mini-sub {
+    left: 11.5%;
+    top: 28%;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  .roadmap-bubble {
+    display: none;
+  }
+}
